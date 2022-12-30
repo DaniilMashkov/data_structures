@@ -31,24 +31,36 @@ class HashTable:
         hash_key = self.custom_hash(key)
         if self.hash_table[hash_key] is None:
             self.hash_table[hash_key] = Node(Data(key, value), None)
-        else:
-            node = self.hash_table[hash_key]
-            while node.next_node:
-                node = node.next_node
-            node.next_node = Node(Data(key, value), None)
+            return
+        node = self.hash_table[hash_key]
+        while node.next_node:
+            if node.data.key == key:
+                node.data.value = value
+                return
+            node = node.next_node
+        if node.data.key == key:
+            node.data.value = value
+            return
+        node.next_node = Node(Data(key, value), None)
+
+        # while current_node.next_node:
+        #     if current_node.data.key == key:
+        #         current_node.data.value = value;
+        #         return
+        #     current_node = current_node.next_node
 
     def get_value(self, key):
         """Получить значение (атрибут value класса Data) по ключу key"""
         hash_key = self.custom_hash(key)
-        if self.hash_table[hash_key] is not None:
-            node = self.hash_table[hash_key]
-            if node.next_node:
-                while node.next_node:
-                    if key == node.data.key:
-                        return node.data.value
-                    node = node.next_node
+        node = self.hash_table[hash_key]
+        if node is None:
+            return None
+        while node.next_node:
+            if key == node.data.key:
                 return node.data.value
+            node = node.next_node
+        return node.data.value
 
-        return None
+
 
 
